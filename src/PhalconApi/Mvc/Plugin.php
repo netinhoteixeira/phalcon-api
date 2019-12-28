@@ -19,8 +19,8 @@ namespace PhalconApi\Mvc;
  * @property \PhalconApi\Data\Query $query
  * @property \PhalconApi\Data\Query\QueryParsers\UrlQueryParser $urlQueryParser
  */
-
-class Plugin extends \Phalcon\Mvc\User\Plugin
+// DONE: 2019-12-28 10:35 AM Francisco - Maintain compatibility
+class Plugin extends \Phalcon\Di\Injectable
 {
 
 }
