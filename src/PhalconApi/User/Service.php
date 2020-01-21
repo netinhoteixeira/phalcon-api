@@ -19,8 +19,8 @@ class Service extends Plugin
         $details = null;
 
         $session = $this->authManager->getSession();
-        if ($session) {
 
+        if ($session) {
             $identity = $session->getIdentity();
             $details = $this->getDetailsForIdentity($identity);
         }
@@ -51,6 +51,7 @@ class Service extends Plugin
     public function getIdentity()
     {
         $session = $this->authManager->getSession();
+
         if ($session) {
             return $session->getIdentity();
         }
@@ -71,4 +72,3 @@ class Service extends Plugin
             'Make a subclass of \PhalconApi\User\Service with an implementation for this method, and register it in your DI.');
     }
 }
-
