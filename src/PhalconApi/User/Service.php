@@ -86,7 +86,11 @@ class Service extends Plugin
         if (is_null($session)) {
             try {
                 $token = $this->request->getToken();
-                $session = $this->tokenParser->getSession($token);
+
+                // FIX: 2020-01-22 00:46 Fix that on authenticate, the token could not exists. So session can be null.
+                if (!is_null($token)) {
+                    $session = $this->tokenParser->getSession($token);
+                }
             } catch (\Exception $e) {
                 throw new Exception(ErrorCodes::AUTH_TOKEN_INVALID);
             }
