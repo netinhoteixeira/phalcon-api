@@ -8,6 +8,21 @@ use PhalconApi\Mvc\Plugin;
 
 class Service extends Plugin
 {
+
+    private function getSession() {
+        $session = $this->authManager->getSession();
+
+        // FIX: 2020-01-22 00:23 Fix that session (token) is not retrieved right
+        if (is_null($session)) {
+            try {
+                $token = $this->request->getToken();
+                $session = $this->tokenParser->getSession($token);
+            } catch (\Exception $e) {
+                throw new Exception(ErrorCodes::AUTH_TOKEN_INVALID);
+            }
+        }
+    }
+
     /**
      * Returns details for the current user, e.g. a User model
      *
@@ -18,7 +33,7 @@ class Service extends Plugin
     {
         $details = null;
 
-        $session = $this->authManager->getSession();
+        $session = $this->getSession();
 
         if ($session) {
             $identity = $session->getIdentity();
@@ -50,7 +65,7 @@ class Service extends Plugin
      */
     public function getIdentity()
     {
-        $session = $this->authManager->getSession();
+        $session = $this->getSession();
 
         if ($session) {
             return $session->getIdentity();
@@ -72,3 +87,4 @@ class Service extends Plugin
             'Make a subclass of \PhalconApi\User\Service with an implementation for this method, and register it in your DI.');
     }
 }
+
