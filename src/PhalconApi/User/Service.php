@@ -10,28 +10,6 @@ class Service extends Plugin
 {
 
     /**
-     * Retrieve session of force to fetch it.
-     *
-     * @return \PhalconApi\Auth\Session|null
-     * @throws Exception
-     */
-    private function getSession() {
-        $session = $this->authManager->getSession();
-
-        // FIX: 2020-01-22 00:23 Fix that session (token) is not retrieved right
-        if (is_null($session)) {
-            try {
-                $token = $this->request->getToken();
-                $session = $this->tokenParser->getSession($token);
-            } catch (\Exception $e) {
-                throw new Exception(ErrorCodes::AUTH_TOKEN_INVALID);
-            }
-        }
-
-        return $session;
-    }
-
-    /**
      * Returns details for the current user, e.g. a User model
      *
      * @return mixed
@@ -94,5 +72,28 @@ class Service extends Plugin
             'Unable to get role for identity, method getRole in user service not implemented. ' .
             'Make a subclass of \PhalconApi\User\Service with an implementation for this method, and register it in your DI.');
     }
+
+    /**
+     * Retrieve session of force to fetch it.
+     *
+     * @return \PhalconApi\Auth\Session|null
+     * @throws Exception
+     */
+    private function getSession() {
+        $session = $this->authManager->getSession();
+
+        // FIX: 2020-01-22 00:23 Fix that session (token) is not retrieved right
+        if (is_null($session)) {
+            try {
+                $token = $this->request->getToken();
+                $session = $this->tokenParser->getSession($token);
+            } catch (\Exception $e) {
+                throw new Exception(ErrorCodes::AUTH_TOKEN_INVALID);
+            }
+        }
+
+        return $session;
+    }
+
 }
 
