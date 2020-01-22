@@ -9,6 +9,12 @@ use PhalconApi\Mvc\Plugin;
 class Service extends Plugin
 {
 
+    /**
+     * Retrieve session of force to fetch it.
+     *
+     * @return \PhalconApi\Auth\Session|null
+     * @throws Exception
+     */
     private function getSession() {
         $session = $this->authManager->getSession();
 
@@ -21,6 +27,8 @@ class Service extends Plugin
                 throw new Exception(ErrorCodes::AUTH_TOKEN_INVALID);
             }
         }
+
+        return $session;
     }
 
     /**
