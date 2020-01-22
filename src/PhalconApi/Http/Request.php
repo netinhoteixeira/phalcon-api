@@ -3,6 +3,8 @@
 namespace PhalconApi\Http;
 
 use PhalconApi\Constants\PostedDataMethods;
+use PhalconApi\Constants\Services;
+use PhalconRest\Di\FactoryDefault;
 
 class Request extends \Phalcon\Http\Request
 {
@@ -168,6 +170,18 @@ class Request extends \Phalcon\Http\Request
     {
         $authHeader = $this->getHeader('AUTHORIZATION');
         $authQuery = $this->getQuery('token');
+
+        // DONE: 2019-12-29 04:51 Francisco - Sometimes the value is not right fetched
+        if ((is_null($authHeader)) || (empty($authHeader))) {
+            $di = FactoryDefault::getDefault();
+            $request = $di->get(Services::REQUEST);
+
+            $headers = $request->getHeaders();
+
+            if (array_key_exists('Authorization', $headers)) {
+                $authHeader = $headers['Authorization'];
+            }
+        }
 
         return $authQuery ? $authQuery : $this->parseBearerValue($authHeader);
     }
